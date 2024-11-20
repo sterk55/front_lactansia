@@ -8,6 +8,7 @@
                 <td><h3 class="option" @click="sendToCreate">Crear Paciente</h3></td>
                 <td><h3 class="option" @click="sendToMostrarAll">Mostrar todas los pacientes</h3></td>
                 <td><h3 class="option" @click="sendToId">Buscar paciente por cedula</h3></td>
+                <td><h3 class="option" @click="sendToRegister">Registrar Ficha Medica</h3></td>
             </tr>
             <tr>
                 <td><h3 class="option" @click="sendToCreateAses">Crear Asesor</h3></td>
@@ -33,6 +34,9 @@ export default {
         },
         sendToId() {
             router.push('/buscarID');
+        },
+        sendToRegister() {
+            router.push('/registrarFicha');
         },
         sendToCreateAses() {
             router.push('/crearases');

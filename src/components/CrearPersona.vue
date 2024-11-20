@@ -5,12 +5,29 @@
     <br />
     <table>
       <tr>
-        <td><label for="nombre">Nombre Completo: </label></td>
-        <td><input v-model="nombre" required type="text" id="nombre" /></td>
+        <td><label for="nombreCompleto">Nombre Completo: </label></td>
+        <td>
+          <input v-model="nombreCompleto" required type="text" id="nombreCompleto" />
+        </td>
       </tr>
       <tr>
-        <td><label for="apellido">Identificación: </label></td>
-        <td><input v-model="apellido" required type="text" id="apellido" /></td>
+        <td><label for="identificacion">Identificación: </label></td>
+        <td>
+          <input
+            v-model="identificacion"
+            required
+            type="text"
+            id="identificacion"
+            @input="validarIdentificacion"
+            maxlength="10"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="fechaNacimiento">Fecha de Nacimiento: </label></td>
+        <td>
+          <input v-model="fechaNacimiento" required type="date" id="fechaNacimiento" />
+        </td>
       </tr>
       <tr>
         <td><label for="telefono">Teléfono: </label></td>
@@ -42,6 +59,24 @@
           <input v-model="enfermedades" required type="text" id="enfermedades" />
         </td>
       </tr>
+      <tr>
+        <td><label for="atencionMedica">Atención Médica: </label></td>
+        <td>
+          <input v-model="atencionMedica" required type="text" id="atencionMedica" />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="medicamentos">Medicamentos: </label></td>
+        <td>
+          <input v-model="medicamentos" required type="text" id="medicamentos" />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="viveCon">Vive con: </label></td>
+        <td>
+          <input v-model="viveCon" required type="text" id="viveCon" />
+        </td>
+      </tr>
     </table>
 
     <table>
@@ -67,13 +102,17 @@ export default {
   },
   data() {
     return {
-      nombre: null,
-      apellido: null,
+      nombreCompleto: null,
+      identificacion: null,
+      fechaNacimiento: null,
       telefono: null,
       residencia: null,
       nivelEstudio: null,
       lugarTrabajo: null,
       enfermedades: null,
+      atencionMedica: null,
+      medicamentos: null,
+      viveCon: null,
       mensaje: null,
     };
   },
@@ -82,24 +121,36 @@ export default {
       // Filtrar solo caracteres numéricos
       this.telefono = this.telefono.replace(/[^0-9]/g, '');
     },
+    validarIdentificacion() {
+      // Filtrar solo caracteres numéricos y limitar a 10 caracteres
+      this.identificacion = this.identificacion.replace(/[^0-9]/g, '').slice(0, 10);
+    },
     async Insertar() {
       const per = {
-        firstName: this.nombre,
-        lastName: this.apellido,
+        fullName: this.nombreCompleto,
+        identityCard: this.identificacion,
+        birthDate: this.fechaNacimiento,
         phone: this.telefono,
         residence: this.residencia,
         educationLevel: this.nivelEstudio,
-        workplace: this.lugarTrabajo,
+        employmentStatus: this.lugarTrabajo,
         diseases: this.enfermedades,
+        healthService: this.atencionMedica,
+        medications: this.medicamentos,
+        livingWith: this.viveCon,
       };
       if (
-        !this.nombre ||
-        !this.apellido ||
+        !this.nombreCompleto ||
+        !this.identificacion ||
+        !this.fechaNacimiento ||
         !this.telefono ||
         !this.residencia ||
         !this.nivelEstudio ||
         !this.lugarTrabajo ||
-        !this.enfermedades
+        !this.enfermedades ||
+        !this.atencionMedica ||
+        !this.medicamentos ||
+        !this.viveCon
       ) {
         this.mensaje = 'Llene todos los campos.';
       } else {
@@ -107,13 +158,17 @@ export default {
           await InsertarPer(per);
           this.mensaje = 'Se ha ingresado correctamente.';
           // Limpiar los campos
-          this.nombre = null;
-          this.apellido = null;
+          this.nombreCompleto = null;
+          this.identificacion = null;
+          this.fechaNacimiento = null;
           this.telefono = null;
           this.residencia = null;
           this.nivelEstudio = null;
           this.lugarTrabajo = null;
           this.enfermedades = null;
+          this.atencionMedica = null;
+          this.medicamentos = null;
+          this.viveCon = null;
         } catch (error) {
           this.mensaje = 'Ocurrió un error al ingresar los datos.';
         }

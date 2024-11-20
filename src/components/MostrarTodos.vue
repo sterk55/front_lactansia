@@ -8,33 +8,39 @@
         <table class="tablasP">
           <thead>
             <tr>
-              <th class="bonito" scope="col">ID</th>
-              <th class="bonito" scope="col">Nombre</th>
-              <th class="bonito" scope="col">Apellido</th>
+              <th class="bonito" scope="col">Cédula</th>
+              <th class="bonito" scope="col">Nombre Completo</th>
+              <th class="bonito" scope="col">Fecha de Nacimiento</th>
               <th class="bonito" scope="col">Teléfono</th>
               <th class="bonito" scope="col">Residencia</th>
               <th class="bonito" scope="col">Nivel de Estudio</th>
               <th class="bonito" scope="col">Lugar de Trabajo</th>
               <th class="bonito" scope="col">Enfermedades</th>
+              <th class="bonito" scope="col">Atención Médica</th>
+              <th class="bonito" scope="col">Medicamentos</th>
+              <th class="bonito" scope="col">Vive Con</th>
               <th class="bonito" scope="col">Editar</th>
               <th class="bonito" scope="col">Eliminar</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="l in lista" :key="l.id">
-              <th class="bonito">{{ l.id }}</th>
-              <td class="bonito">{{ l.firstName }}</td>
-              <td class="bonito">{{ l.lastName }}</td>
-              <td class="bonito">{{ l.phone }}</td>
-              <td class="bonito">{{ l.residence }}</td>
-              <td class="bonito">{{ l.educationLevel }}</td>
-              <td class="bonito">{{ l.workplace }}</td>
-              <td class="bonito">{{ l.diseases }}</td>
+            <tr v-for="persona in lista" :key="persona.identityCard">
+              <th class="bonito">{{ persona.identityCard }}</th>
+              <td class="bonito">{{ persona.fullName }}</td>
+              <td class="bonito">{{ persona.birthDate }}</td>
+              <td class="bonito">{{ persona.phone }}</td>
+              <td class="bonito">{{ persona.residence }}</td>
+              <td class="bonito">{{ persona.educationLevel }}</td>
+              <td class="bonito">{{ persona.employmentStatus }}</td>
+              <td class="bonito">{{ persona.diseases }}</td>
+              <td class="bonito">{{ persona.healthService }}</td>
+              <td class="bonito">{{ persona.medications }}</td>
+              <td class="bonito">{{ persona.livingWith }}</td>
               <td class="bonito">
-                <a id="idEditar" @click="editarPer(l)">Editar</a>
+                <a id="idEditar" @click="editarPer(persona)">Editar</a>
               </td>
               <td class="bonito">
-                <a id="idEliminar" @click="alerta(l.id)">Eliminar</a>
+                <a id="idEliminar" @click="alerta(persona.identityCard)">Eliminar</a>
               </td>
             </tr>
           </tbody>
@@ -66,7 +72,7 @@ export default {
       try {
         this.lista = await listaPerTodos();
         if (this.lista.length === 0) {
-          this.mensaje = "No hay personas ingresadas";
+          this.mensaje = "No hay pacientes ingresados.";
           this.mostrarB = false;
         } else {
           this.mostrarB = true;
@@ -74,38 +80,42 @@ export default {
         }
       } catch (error) {
         this.mensaje = "Error al cargar la lista.";
-        console.error("Error al cargar lista de personas:", error);
+        console.error("Error al cargar lista de pacientes:", error);
       }
     },
-    async eliminarPersona(id) {
+    async eliminarPersona(identityCard) {
       try {
-        await eliminarPerId(id);
-        alert("Se ha eliminado correctamente");
+        await eliminarPerId(identityCard);
+        alert("Se ha eliminado correctamente.");
         await this.cargarLista(); // Recarga la lista después de eliminar
       } catch (error) {
-        console.error("Error al eliminar persona:", error);
+        console.error("Error al eliminar el paciente:", error);
       }
     },
-    alerta(id) {
-      const opcion = confirm("Desea eliminar la persona con id: " + id);
+    alerta(identityCard) {
+      const opcion = confirm("Desea eliminar el paciente con cédula: " + identityCard + "?");
       if (opcion) {
-        this.eliminarPersona(id);
+        this.eliminarPersona(identityCard);
       } else {
-        alert("No se ha eliminado nada");
+        alert("No se ha eliminado nada.");
       }
     },
     editarPer(persona) {
       this.$router.push({
         name: "editar",
         params: {
-          ids: persona.id,
-          nombres: persona.firstName,
-          apellidos: persona.lastName,
-          telefonos: persona.phone,
-          residencias: persona.residence,
-          nivelesEstudio: persona.educationLevel,
-          lugaresTrabajo: persona.workplace,
-          enfermedades: persona.diseases,
+          id: persona.id,
+          identityCard: persona.identityCard,
+          fullName: persona.fullName,
+          birthDate: persona.birthDate,
+          phone: persona.phone,
+          residence: persona.residence,
+          educationLevel: persona.educationLevel,
+          employmentStatus: persona.employmentStatus,
+          diseases: persona.diseases,
+          healthService: persona.healthService,
+          medications: persona.medications,
+          livingWith: persona.livingWith,
         },
       });
     },
@@ -115,7 +125,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.cargarLista(); // Asegura que se recargue la lista cuando vuelvas a esta página
+      vm.cargarLista(); // Asegura que se recargue la lista al volver a esta página
     });
   },
 };
@@ -128,8 +138,8 @@ export default {
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
-  width: 80%;
-  max-width: 800px;
+  width: 90%;
+  max-width: 1000px;
 }
 
 table {
@@ -143,7 +153,6 @@ table {
 }
 
 .bonito {
-  width: 10%;
   text-align: left;
   vertical-align: top;
   border: 1px solid #000;

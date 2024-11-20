@@ -6,7 +6,7 @@
     <table>
       <tr>
         <td><label for="">Ingrese la cédula: </label></td>
-        <td><input required v-model="id" type="text" /></td>
+        <td><input required v-model="identityCard" type="text" /></td>
       </tr>
     </table>
     <br />
@@ -22,15 +22,15 @@
       <button @click="redirigirCrear">Crear nuevo paciente</button>
     </div>
 
-    <!-- Muestra los datos solo si `lista` existe y no es nula -->
-    <fieldset v-if="lista && lista.id">
+    <!-- Muestra los datos solo si `paciente` existe -->
+    <fieldset v-if="paciente && paciente.identityCard">
       <div>
         <table class="tablasP">
           <thead>
             <tr>
-              <th class="bonito" scope="col">ID</th>
-              <th class="bonito" scope="col">Nombre</th>
-              <th class="bonito" scope="col">Apellido</th>
+              <th class="bonito" scope="col">Cédula</th>
+              <th class="bonito" scope="col">Nombre Completo</th>
+              <th class="bonito" scope="col">Fecha de Nacimiento</th>
               <th class="bonito" scope="col">Teléfono</th>
               <th class="bonito" scope="col">Residencia</th>
               <th class="bonito" scope="col">Nivel de Estudio</th>
@@ -42,16 +42,16 @@
           </thead>
           <tbody>
             <tr>
-              <th class="bonito">{{ lista.id }}</th>
-              <td class="bonito">{{ lista.firstName }}</td>
-              <td class="bonito">{{ lista.lastName }}</td>
-              <td class="bonito">{{ lista.phone }}</td>
-              <td class="bonito">{{ lista.residence }}</td>
-              <td class="bonito">{{ lista.educationLevel }}</td>
-              <td class="bonito">{{ lista.workplace }}</td>
-              <td class="bonito">{{ lista.diseases }}</td>
-              <td class="bonito"><a id="idEditar" @click="editarPac(lista)">Editar</a></td>
-              <td class="bonito"><a id="idEliminar" @click="alerta(lista.id)">Eliminar</a></td>
+              <td class="bonito">{{ paciente.identityCard }}</td>
+              <td class="bonito">{{ paciente.fullName }}</td>
+              <td class="bonito">{{ paciente.birthDate }}</td>
+              <td class="bonito">{{ paciente.phone }}</td>
+              <td class="bonito">{{ paciente.residence }}</td>
+              <td class="bonito">{{ paciente.educationLevel }}</td>
+              <td class="bonito">{{ paciente.employmentStatus }}</td>
+              <td class="bonito">{{ paciente.diseases }}</td>
+              <td class="bonito"><a id="idEditar" @click="editarPac(paciente)">Editar</a></td>
+              <td class="bonito"><a id="idEliminar" @click="alerta(paciente.identityCard)">Eliminar</a></td>
             </tr>
           </tbody>
         </table>
@@ -70,63 +70,64 @@ export default {
   },
   data() {
     return {
-      lista: null, // Inicializa la lista como null
-      mostrarB: false,
+      paciente: null, // Información del paciente encontrado
       mensaje: null,
-      id: '',
+      identityCard: '', // Modelo para buscar por cédula
     };
   },
   methods: {
     async mostrarLista() {
       try {
-        this.lista = await buscarPerId(this.id); // Llama a la función para obtener el paciente.
-        if (this.lista) {
-          this.mostrarB = true; // Paciente encontrado
+        this.paciente = await buscarPerId(this.identityCard); // Llama a la función para buscar paciente por cédula.
+        if (this.paciente) {
           this.mensaje = "";
         } else {
-          this.mostrarB = false; // Paciente no encontrado
-          this.mensaje = "No existe el paciente";
+          this.mensaje = "No existe el paciente con esta cédula.";
         }
       } catch (error) {
         console.error("Error al obtener el paciente:", error);
-        this.mensaje = "Error al buscar el paciente";
-        this.lista = null; // Asegúrate de que `this.lista` esté en null si hay un error
+        this.mensaje = "Error al buscar el paciente.";
+        this.paciente = null; // Asegúrate de que `this.paciente` esté en null si hay un error
       }
     },
-    async eliminarPac(id) {
+    async eliminarPac(identityCard) {
       try {
-        await eliminarPerId(id);
-        alert("El paciente ha sido eliminado correctamente");
-        location.reload(); // Recarga la página después de eliminar
+        await eliminarPerId(identityCard);
+        alert("El paciente ha sido eliminado correctamente.");
+        this.paciente = null; // Limpia la información del paciente
       } catch (error) {
         console.error("Error al eliminar el paciente:", error);
       }
     },
-    alerta(id) {
-      const opcion = confirm("¿Desea eliminar el paciente con id: " + id + "?");
+    alerta(identityCard) {
+      const opcion = confirm("¿Desea eliminar el paciente con cédula: " + identityCard + "?");
       if (opcion) {
-        this.eliminarPac(id);
+        this.eliminarPac(identityCard);
       } else {
-        alert("No se ha eliminado nada");
+        alert("No se ha eliminado nada.");
       }
     },
     editarPac(paciente) {
       this.$router.push({
         name: "editar",
         params: {
-          ids: paciente.id,
-          nombres: paciente.firstName,
-          apellidos: paciente.lastName,
-          telefonos: paciente.phone,
-          residencias: paciente.residence,
-          nivelesEstudio: paciente.educationLevel,
-          lugaresTrabajo: paciente.workplace,
-          enfermedades: paciente.diseases,
+          id: paciente.id,
+          identityCard: paciente.identityCard,
+          fullName: paciente.fullName,
+          birthDate: paciente.birthDate,
+          phone: paciente.phone,
+          residence: paciente.residence,
+          educationLevel: paciente.educationLevel,
+          employmentStatus: paciente.employmentStatus,
+          diseases: paciente.diseases,
+          healthService: paciente.healthService,
+          medications: paciente.medications,
+          livingWith: paciente.livingWith,
         },
       });
     },
     redirigirCrear() {
-      this.$router.push('/crearases'); // Navega al componente de crear
+      this.$router.push('/crear'); // Navega al componente de creación
     },
   },
 };

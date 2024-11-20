@@ -2,9 +2,11 @@
     <nav class="navbar">
         <ul class="navbar-list">
             <li><router-link to="/main">Inicio</router-link></li>
+            <li><router-link to="/crearases">Crear Asesores</router-link></li>
             <li><router-link to="/mostrarAses">Mostrar Asesores</router-link></li>
             <li><router-link to="/buscarAsesID">Buscar Asesor por cedula</router-link></li>
         </ul>
+        <button class="logout-btn">Cerrar sesión</button>
     </nav>
 </template>
 
@@ -22,6 +24,9 @@ export default {
     top: 0; /* Se mantiene en la parte superior al hacer scroll */
     width: 100%; /* Abarca todo el ancho de la ventana */
     z-index: 1000; /* Asegura que la navbar esté por encima de otros elementos */
+    display: flex; /* Flexbox para alinear los elementos */
+    justify-content: space-between; /* Coloca los elementos a los lados opuestos */
+    align-items: center; /* Alinea los elementos verticalmente */
 }
 
 .navbar-list {
@@ -44,5 +49,21 @@ export default {
 
 .navbar-list a:hover {
     color: #007BFF; /* Color al pasar el ratón */
+}
+
+/* Estilos para el botón de cerrar sesión */
+.logout-btn {
+    padding: 10px 20px;
+    background-color: #FF4C4C; /* Rojo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-right: 20px; /* Espacio entre el botón y el borde derecho */
+}
+
+.logout-btn:hover {
+    background-color: #FF1F1F; /* Rojo más oscuro al pasar el ratón */
 }
 </style>
