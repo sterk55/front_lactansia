@@ -44,7 +44,15 @@
       <tr>
         <td><label for="nivelEstudio">Nivel de Estudio: </label></td>
         <td>
-          <input v-model="nivelEstudio" required type="text" id="nivelEstudio" />
+          <select v-model="nivelEstudio" required id="nivelEstudio">
+            <option value="" disabled>Seleccione una opción</option>
+            <option value="Primaria">Primaria</option>
+            <option value="Secundaria">Secundaria</option>
+            <option value="Preparatoria">Preparatoria</option>
+            <option value="Bachiller">Bachiller</option>
+            <option value="3er Nivel">3er Nivel</option>
+            <option value="Sin estudios">Sin estudios</option>
+          </select>
         </td>
       </tr>
       <tr>
@@ -118,11 +126,9 @@ export default {
   },
   methods: {
     validarTelefono() {
-      // Filtrar solo caracteres numéricos
       this.telefono = this.telefono.replace(/[^0-9]/g, '');
     },
     validarIdentificacion() {
-      // Filtrar solo caracteres numéricos y limitar a 10 caracteres
       this.identificacion = this.identificacion.replace(/[^0-9]/g, '').slice(0, 10);
     },
     async Insertar() {
@@ -157,7 +163,6 @@ export default {
         try {
           await InsertarPer(per);
           this.mensaje = 'Se ha ingresado correctamente.';
-          // Limpiar los campos
           this.nombreCompleto = null;
           this.identificacion = null;
           this.fechaNacimiento = null;

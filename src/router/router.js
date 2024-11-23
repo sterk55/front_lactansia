@@ -45,9 +45,19 @@ const routes = [
     },
     {
         path: '/editarases/:ids-:nombres-:direccions-:edads',
-        name: 'editar',
+        name: 'editarases',
         props: true,
         component: () => import('../components/EditarAse')
+    },
+    {
+        path: '/crearficha/:identityCard',
+        name: 'crearficha',
+        props: true,
+        component: () => import('../components/formularioFicha.vue')
+    },
+    {
+        path: '/buscarficha',
+        component: () => import('../components/buscarFichaCedula.vue')
     },
     // Ruta catch-all que redirige a /main
     {

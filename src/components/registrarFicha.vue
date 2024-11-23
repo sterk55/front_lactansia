@@ -41,7 +41,7 @@
                 <td class="bonito">{{ paciente.fullName }}</td>
                 <td class="bonito">{{ paciente.birthDate }}</td>
                 <td class="bonito">{{ paciente.phone }}</td>
-                <td class="bonito"><a id="idEditar" @click="editarPac(paciente)">Añadir Ficha</a></td>
+                <td class="bonito"><a id="idEditar" @click="crearFicha(paciente)">Añadir Ficha</a></td>
               </tr>
             </tbody>
           </table>
@@ -65,6 +65,7 @@
         identityCard: '', // Modelo para buscar por cédula
       };
     },
+    
     methods: {
       async mostrarLista() {
         try {
@@ -97,15 +98,11 @@
           alert("No se ha eliminado nada.");
         }
       },
-      editarPac(paciente) {
+      crearFicha(paciente) {
         this.$router.push({
-          name: "editar",
+          name: "crearficha",
           params: {
-            id: paciente.id,
             identityCard: paciente.identityCard,
-            fullName: paciente.fullName,
-            birthDate: paciente.birthDate,
-            phone: paciente.phone,
           },
         });
       },
